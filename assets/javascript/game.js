@@ -7,22 +7,14 @@ var hiddenWords = ['red', 'blue', 'yellow', 'green', 'orange']
 var computerGuess = hiddenWords[Math.floor(Math.random() * hiddenWords.length)];
 console.log(computerGuess);
 
-//var FirstWord = hiddenWords[0];
-
-console.log(computerGuess);
-//splits chosen word into letters
-
 var hiddenWordLetters = computerGuess.split('');
-
-//make letters in word display as - - - 
 var displayWord = computerGuess.split('');
 
-var result="";
-for(i= displayWord.length-1; i>=0;i--){
+var result = "";
+for (i = displayWord.length - 1; i >= 0; i--) {
     displayWord.fill('-');
-    result = displayWord[i]+result;
+    result = displayWord[i] + result;
 }
-
 
 var listUserChoices = [];
 
@@ -44,43 +36,46 @@ document.onkeyup = function (event) {
 
     //check key against list of letters in hidden word
 
-    hiddenWordLetters.indexOf() >= 0;
+    hiddenWordLetters.indexOf() >= 0
 
     var letterPosition = hiddenWordLetters.indexOf(userGuess);
 
-    console.log(hiddenWordLetters[letterPosition]);
-    //Take this index and apply to displayWord and change '-' to the letter
+    var letterReplace = hiddenWordLetters[letterPosition];
 
-    console.log(displayWord[letterPosition]);
+    displayWord.splice(letterPosition, 1, letterReplace);
 
-    var letterReplace = displayWord.indexOf(letterPosition);
 
-    //if (letterReplace !== -1) {
-        displayWord[letterReplace] = hiddenWordLetters[letterPosition];
-    //}
 
     // This logic determines the outcome of the game (win/loss/tie), and increments the appropriate number
 
 
-    if ((userGuess != computerGuess) && (guessesLeft > 1)) {
+
+    if ((displayWord != hiddenWordLetters) && (guessesLeft > 1)) {
         guessesLeft--;
+        result = "";
+        for (i = displayWord.length - 1; i >= 0; i--) {
+            result = displayWord[i] + result;
+        }
     }
-    else if (userGuess === computerGuess) {
+
+    else if (displayWord === hiddenWordLetters) {
         wins++;
         guessesLeft = 10;
         listUserChoices = [];
         document.getElementById('game').innerHTML = "you win! Now the game is starting over.";
-        computerGuess = hiddenWords[Math.floor(Math.random() * hiddenWords.length)];
-        console.log(computerGuess + " = local");
+
+        renderNewWord()
+        console.log(hiddenWordLetters + " = local");
     }
 
-    else if ((userGuess != computerGuess) && (guessesLeft === 1)) {
+    else if ((displayWord != hiddenWordLetters) && (guessesLeft === 1)) {
         guessesLeft = 10;
         listUserChoices = [];
         losses++;
         document.getElementById('game').innerHTML = "You lose! Now the game is starting over.";
-        computerGuess = hiddenWords[Math.floor(Math.random() * hiddenWords.length)];
-        console.log(computerGuess + " = local");
+
+        renderNewWord()
+        console.log(hiddenWordLetters + " = local");
 
     }
 
@@ -91,12 +86,20 @@ document.onkeyup = function (event) {
     document.getElementById('guesses').innerHTML = guessesLeft;
     document.getElementById('listUserChoices').innerHTML = listUserChoices;
 
-
-    document.getElementById("display-word").innerHTML=result;
+    document.getElementById("display-word").innerHTML = result;
 }
 
 
 
+function renderNewWord() {
+    computerGuess = hiddenWords[Math.floor(Math.random() * hiddenWords.length)];
+    //make letters in word display as - - - 
+    displayWord = computerGuess.split('');
 
-
+    var result = "";
+    for (i = displayWord.length - 1; i >= 0; i--) {
+        displayWord.fill('-');
+        result = displayWord[i] + result;
+    }
+}
 
